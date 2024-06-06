@@ -14,11 +14,11 @@ include(ImportLibrary)
 
 # valgrind need
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-builtin-strlen")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-builtin-strlen -Werror=maybe-uninitialized")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-builtin-strlen")
 # sanitize
 set(CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize=leak -fsanitize-address-use-after-scope"
+    "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize=leak -fsanitize-address-use-after-scope -Werror=maybe-uninitialized"
 )
 
 # download libevent
@@ -32,8 +32,8 @@ add_subdirectory(${IMPORT_SRC} ${IMPORT_BUILD} EXCLUDE_FROM_ALL)
 # download google test
 import_library(
   googletest
-  https://github.com/google/googletest/archive/refs/tags/release-1.10.0.zip
-  82358affdd7ab94854c8ee73a180fc53)
+  https://github.com/google/googletest/archive/refs/tags/release-1.11.0.zip
+  52943a59cefce0ae0491d4d2412c120b)
 add_subdirectory(${IMPORT_SRC} ${IMPORT_BUILD} EXCLUDE_FROM_ALL)
 
 import_library(
@@ -60,7 +60,7 @@ add_executable(
 target_link_libraries(${EXEC_NAME} event_core event_pthreads event_extra
                       spdlog::spdlog)
 # Be regorous
-target_compile_options(${EXEC_NAME} PUBLIC -Werror -Wall -Wextra -pedantic)
+target_compile_options(${EXEC_NAME} PUBLIC -Werror=maybe-uninitialized  -Wall -Wextra -pedantic)
 
 # test
 add_subdirectory(tests)
