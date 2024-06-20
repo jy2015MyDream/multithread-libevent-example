@@ -35,8 +35,9 @@ memoryBuff::~memoryBuff()
     _pTail = nullptr;
 }
 
-void memoryBuff::GetWriteBuff(unsigned char *buff, unsigned short &len)
+unsigned char * memoryBuff::GetWriteBuff( unsigned short &len)
 {
+    unsigned char * buff;
     if (_pWrite->_cap - _pWrite->_write_size > 0)
     {
         buff = _pWrite->_pData + _pWrite->_write_size;
@@ -52,14 +53,17 @@ void memoryBuff::GetWriteBuff(unsigned char *buff, unsigned short &len)
         buff = _pWrite->_pData;
         len = _pWrite->_cap;
     }
+    return buff;
 }
-void memoryBuff::GetReadBuff(unsigned char *buff, unsigned short &len)
+unsigned char * memoryBuff::GetReadBuff( unsigned short &len)
 {
     if (_pRead->_write_size > _pRead->_read_size)
     {
-        buff = _pRead->_pData + _pRead->_read_size;
+        //buff = _pRead->_pData + _pRead->_read_size;
         len = _pRead->_write_size - _pRead->_read_size;
+        return _pRead->_pData + _pRead->_read_size;
     }
+    return nullptr;
 }
 
 void memoryBuff::AdjustWriteSize(unsigned short &len)
@@ -83,7 +87,7 @@ void memoryBuff::AdjustWriteSize(unsigned short &len)
     }
 }
 
-void memoryBuff::AdjustReadSize(unsigned short &len)
+void memoryBuff::AdjustReadSize(unsigned short len)
 {
     if (_pRead == _pWrite)
     {

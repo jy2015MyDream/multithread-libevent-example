@@ -7,13 +7,13 @@
     this buff must be new() construction,
 */
 
-#include "ListEx.h"
 
+#pragma once
 #ifndef __MEMORY_BUFF_H_
 #define __MEMORY_BUFF_H_
 #define _DEFAULT_MEMORY_LIST_NODE_ 2
 #define _DEFAULT_NODE_FREE_COUNT 5
-
+#include "ListEx.h"
 
 class memoryBuff
 {
@@ -30,7 +30,7 @@ public:
     /*
     get write buff addr and buff size, input data to this buff,but input data size lt len
     */
-    void GetWriteBuff(unsigned char *buff, unsigned short &len);
+    unsigned char * GetWriteBuff(unsigned short &len);
     /*
         real write date size, otherwise assert fail
     */
@@ -38,10 +38,10 @@ public:
     /*
     get read buff point and buff size,out put data size lt len
     */
-    void GetReadBuff(unsigned char *buff, unsigned short &len);
+    unsigned char * GetReadBuff(unsigned short &len);
     /*
         real read data size，otherwise assert fail
     */
-    void AdjustReadSize(unsigned short &len);
+    void AdjustReadSize(unsigned short len);
 };
 #endif

@@ -41,26 +41,56 @@ import_library(
   06cd154999c8019f52e57afe4a8068f0)
 add_subdirectory(${IMPORT_SRC} ${IMPORT_BUILD} EXCLUDE_FROM_ALL)
 
-# add target
-set(EXEC_NAME multithread-libevent-example)
+#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ExtNet/ EXCLUDE_FROM_ALL)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ExtNet/)
+
+set(EXEC_NAME NetService)
+# set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ExtNet/common/") 
+# file(GLOB_RECURSE SOURCE_FILES "${SOURCE_DIR}/*.c") 
 add_executable(
   ${EXEC_NAME}
-  main.cc
-  buffer.cc
-  buffer.h
-  thread_pool.h
-  thread_pool.cc
-  dispatcher.h
-  dispatcher.cc
-  handler.cc
-  handler.h
-  listener.cc
-  listener.h)
-# dependency libraries
-target_link_libraries(${EXEC_NAME} event_core event_pthreads event_extra
-                      spdlog::spdlog)
-# Be regorous
+  # main.cc
+  # buffer.cc
+  # buffer.h
+  # thread_pool.h
+  # thread_pool.cc
+  # dispatcher.h
+  # dispatcher.cc
+  # handler.cc
+  # handler.h
+  # listener.cc
+  # listener.h
+
+  ExtNet/common/handshake.c
+  ExtNet/common/sha1.c
+  ExtNet/common/utf8.c
+  ExtNet/common/base64.c
+  ExtNet/memoryBuff/memoryBuff.cpp
+  ExtNet/memoryBuff/stickyWrap.cpp
+  ExtNet/common/FdBridge.cpp
+
+  ExtNet/tcp/TcpStickyWrap.cpp
+  ExtNet/tcp/TcpConnect.cpp
+  ExtNet/tcp/TcpConnectMgr.cpp
+  ExtNet/Net/TcpService.cpp
+  Net.cc
+  )
+
+#set(NETSERVICE TEST)
+
+
+#target_link_libraries(${NETSERVICE} event_core)
+target_link_libraries(${EXEC_NAME} event_core event_pthreads)
+# target_link_libraries(${NETSERVICE} event_core event_pthreads event_extra
+#                       spdlog::spdlog)
+#target_compile_options(TEST PUBLIC -Werror=maybe-uninitialized  -Wall -Wextra -pedantic)
 target_compile_options(${EXEC_NAME} PUBLIC -Werror=maybe-uninitialized  -Wall -Wextra -pedantic)
 
+add_executable(
+  "client"
+  client.cc
+)
+target_link_libraries("client" event_core event_pthreads)
+target_compile_options("client"  PUBLIC -Werror=maybe-uninitialized  -Wall -Wextra -pedantic)
 # test
-add_subdirectory(tests)
+#add_subdirectory(tests)
