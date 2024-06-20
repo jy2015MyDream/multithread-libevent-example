@@ -207,34 +207,26 @@ extern int get_handshake_response(char *hsrequest, char **hsresponse);
 //   }
 //   return true;
 // }
-// bool Ret = false;
-// #if Ret == true
-// #pragma pack(1)
-// typedef struct Ws_Base {
-//   unsigned char frist : 1;
-//   unsigned char Rsv : 3;
-//   unsigned char opcod : 4;
-//   unsigned char mask : 1;
-//   unsigned char payLoad : 7;
-// #pragma pack()
-// } ws_base;
-// #else
-#pragma pack(1)
-typedef struct Ws_Base {
-  unsigned char opcod : 4;
-  unsigned char Rsv : 3;
-  unsigned char frist : 1;
-  unsigned char payLoad : 7;
-  unsigned char mask : 1;
-} ws_base;
-#pragma pack()
-//#endif
 
-typedef struct WS_HEAD {
-  ws_base *wbs;
-  unsigned long int len;
-  uint8_t masks[4];
-} ws_head;
+struct frame_state_data
+{
+	unsigned char *msg_data; /* Data frame.                */
+	unsigned char *msg_ctrl; /* Control frame.             */
+	uint8_t masks_data[4];   /* Masks data frame array.    */
+	uint8_t masks_ctrl[4];   /* Masks control frame array. */
+	uint64_t msg_idx_data;   /* Current msg index.         */
+	uint64_t msg_idx_ctrl;   /* Current msg index.         */
+	uint64_t frame_length;   /* Frame length.              */
+	uint64_t frame_size;     /* Current frame size.        */
+#ifdef VALIDATE_UTF8
+	uint32_t utf8_state;     /* Current UTF-8 state.       */
+#endif
+	int32_t pong_id;         /* Current PONG id.           */
+	uint8_t opcode;          /* Frame opcode.              */
+	uint8_t is_fin;          /* Is FIN frame flag.         */
+	uint8_t mask;            /* Mask.                      */
+	int cur_byte;            /* Current frame byte.        */
+};
 
 #ifdef __cplusplus
 }
