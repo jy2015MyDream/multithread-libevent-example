@@ -64,7 +64,7 @@ int WsStickyWrap::readData(char *pbuff, uint16_t len) {
               break;
           }
         }
-      } while (len - read_len > 0);
+      } while (_Data_size - _Read_size > 0);
     } else {
       printf("long data\n");
       return -1;
