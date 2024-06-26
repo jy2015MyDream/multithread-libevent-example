@@ -12,6 +12,7 @@
 #ifndef __FDBRIDGE_H__
 #define __FDBRIDGE_H__
 #include "../memoryBuff/memoryBuff.h"
+#include <stdint.h>
 
 typedef std::function<void()> notifyCB;
 class FdBridge {
@@ -29,7 +30,7 @@ class FdBridge {
 public:
   int read() ;
   virtual int notifyred() = 0;
-  void write();
+  int write(char *pData, uint64_t size);
   bool checkFinishPack();
   memoryBuff * GetBuffPtr();
 };

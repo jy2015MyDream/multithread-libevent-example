@@ -129,3 +129,15 @@ void memoryBuff::AdjustReadSize(unsigned short len)
         }
     }
 }
+char *memoryBuff::GetChar()
+{
+    if (_pRead->_write_size > _pRead->_read_size)
+    {
+        //buff = _pRead->_pData + _pRead->_read_size;
+        char * buff = (char *)_pRead->_pData + _pRead->_read_size;
+        _pRead->_read_size++;
+        return  buff ;
+        
+    }
+    return nullptr;
+}

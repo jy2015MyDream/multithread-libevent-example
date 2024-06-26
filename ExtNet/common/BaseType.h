@@ -59,7 +59,7 @@ struct PackDealWith {
 typedef struct Ws_Base {
   unsigned char opcod : 4;
   unsigned char Rsv : 3;
-  unsigned char frist : 1;
+  unsigned char fin : 1;
   unsigned char payLoad : 7;
   unsigned char mask : 1;
 } ws_base;
@@ -72,7 +72,7 @@ typedef struct WS_HEAD {
 
 enum OP_State{
     INIT_HEAD=1,
-    READ_LEN=2,
+    READ_PAYLOAD=2,
     READ_MASK=3,
     READ_MASK_KEY=4,
     READ_DATA=5,

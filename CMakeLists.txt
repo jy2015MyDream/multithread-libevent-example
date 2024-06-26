@@ -73,6 +73,11 @@ add_executable(
   ExtNet/tcp/TcpConnect.cpp
   ExtNet/tcp/TcpConnectMgr.cpp
   ExtNet/Net/TcpService.cpp
+
+  ExtNet/ws/WsStickyWrap.cpp
+  ExtNet/ws/WsConnect.cpp
+  ExtNet/ws/WsConnectMgr.cpp
+  ExtNet/Net/WsService.cpp
   Net.cc
   )
 

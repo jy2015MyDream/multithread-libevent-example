@@ -12,18 +12,19 @@
 #ifndef __WSSTICKYWRAP__H_
 #define __WSSTICKYWRAP__H_
 #include "../common/BaseType.h"
-#include "../memoryBuff/memoryBuff.h"
-#include "../common/ws.h"
 #include "../common/FdBridge.h"
+#include "../common/ws.h"
+#include "../memoryBuff/memoryBuff.h"
 
-class WsStickyWrap : public  WsDealWith , public FdBridge {
+class WsStickyWrap : public WsDealWith, public FdBridge {
  public:
   WsStickyWrap(int fd);
   ~WsStickyWrap();
-  virtual int readData();
+  virtual int readData(char *pbuff, uint16_t len);
   virtual void MakeServerMsg(UChar *buff, PKLType len) = 0;
-  virtual int parseWsHead(char *p,int len);
-
-  virtual int finishParse();
+  virtual int parseWsHead(char *p, int len);
+  virtual int finishParse(char *pData, int size);
+  unsigned short CalFrameHeadSize();
+  int sendFrame(const char *pdata, uint64_t size, int type);
 };
 #endif

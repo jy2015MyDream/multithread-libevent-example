@@ -1,23 +1,23 @@
 
 #include "FdBridge.h"
+
+#include <stdint.h>
 #include <unistd.h>
+
 FdBridge::FdBridge(int fd) { _fd = fd; }
 void FdBridge::setReadNotify(notifyCB notify) { _notify_read = notify; }
-FdBridge::~FdBridge(){
+FdBridge::~FdBridge() {
   close(_fd);
   _fd = 0;
 }
-int FdBridge::getFd(){
-  return _fd;
-}
+int FdBridge::getFd() { return _fd; }
 
 int FdBridge::read() {
   int n = 0;
   while (true) {
     unsigned short len = 0;
     unsigned char *buff = _buff.GetWriteBuff(len);
-    if(buff == nullptr || len == 0)
-    {
+    if (buff == nullptr || len == 0) {
       printf("not buff\n");
       break;
     }
@@ -41,10 +41,9 @@ int FdBridge::read() {
   return notifyred();
 }
 
-void FdBridge::write(){
-    
-}
-bool FdBridge::checkFinishPack(){
-    return false;
-}
+bool FdBridge::checkFinishPack() { return false; }
 memoryBuff *FdBridge::GetBuffPtr() { return &_buff; }
+
+int FdBridge::write(char *pData, uint64_t size) {
+  return send(_fd, pData, size, MSG_NOSIGNAL);
+}

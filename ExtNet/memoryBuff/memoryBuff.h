@@ -43,5 +43,6 @@ public:
         real read data size，otherwise assert fail
     */
     void AdjustReadSize(unsigned short len);
+    char *GetChar();
 };
 #endif

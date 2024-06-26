@@ -195,38 +195,47 @@ extern "C" {
 extern int get_handshake_accept(char *wsKey, unsigned char **dest);
 extern int get_handshake_response(char *hsrequest, char **hsresponse);
 
+
+/**
+ * @brief Text frame.
+ */
+#define WS_FR_OP_TXT 1
+/**
+ * @brief Binary frame.
+ */
+#define WS_FR_OP_BIN 2
+
+/**
+ * @brief Close frame.
+ */
+#define WS_FR_OP_CLSE 8
+
+/**
+ * @brief Ping frame.
+ */
+#define WS_FR_OP_PING 0x9
+
+/**
+ * @brief Pong frame.
+ */
+#define WS_FR_OP_PONG 0xA
+
+/**
+ * @brief Unsupported frame.
+ */
+#define WS_FR_OP_UNSUPPORTED 0xF
 // bool isBig() {
 //   union un {
 //     int i;
 //     char c;
 //   }u;
- 
+
 //   u.i = 1;
 //   if (u.c == 1) {
 //     return false;
 //   }
 //   return true;
 // }
-
-struct frame_state_data
-{
-	unsigned char *msg_data; /* Data frame.                */
-	unsigned char *msg_ctrl; /* Control frame.             */
-	uint8_t masks_data[4];   /* Masks data frame array.    */
-	uint8_t masks_ctrl[4];   /* Masks control frame array. */
-	uint64_t msg_idx_data;   /* Current msg index.         */
-	uint64_t msg_idx_ctrl;   /* Current msg index.         */
-	uint64_t frame_length;   /* Frame length.              */
-	uint64_t frame_size;     /* Current frame size.        */
-#ifdef VALIDATE_UTF8
-	uint32_t utf8_state;     /* Current UTF-8 state.       */
-#endif
-	int32_t pong_id;         /* Current PONG id.           */
-	uint8_t opcode;          /* Frame opcode.              */
-	uint8_t is_fin;          /* Is FIN frame flag.         */
-	uint8_t mask;            /* Mask.                      */
-	int cur_byte;            /* Current frame byte.        */
-};
 
 #ifdef __cplusplus
 }

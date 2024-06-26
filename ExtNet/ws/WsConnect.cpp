@@ -2,29 +2,44 @@
 #include "WsConnect.h"
 
 #include "../common/ws.h"
-
-WsConnect::WsConnect(int fd, UQType connId, connectMgr *pConnectMgr)
+#include "WsConnectMgr.h"
+WsConnect::WsConnect(int fd, UQType connId, WsConnectMgr *pConnectMgr)
     : WsStickyWrap(fd) {
   _Ishandshark = false;
+  _connonId = connId;
+  _pConnectMgr = pConnectMgr;
+}
+WsConnect::~WsConnect() {
+  _Ishandshark = false;
+  _connonId = 0;
+  _pConnectMgr = nullptr;
+  event_free(_ev);
+  _ev = nullptr;
 }
 
 int WsConnect::readData() {
   memoryBuff *pbuff = GetBuffPtr();
-  int realLen = 0;
-  unsigned short len = 0;
   unsigned short readlen = 0;
-  unsigned char *pReadBuff = pbuff->GetReadBuff(len);
-  if (len > 0) {
-    if (!_Ishandshark) {
-      int ret = do_handshake((char *)pReadBuff);
-      if (ret < 0) {
-        return ret;
+  while (true) {
+    unsigned short len = 0;
+    unsigned char *pReadBuff = pbuff->GetReadBuff(len);
+    if (len > 0) {
+      if (!_Ishandshark) {
+        int ret = do_handshake((char *)pReadBuff);
+        if (ret < 0) {
+          return ret;
+        }
+        pbuff->AdjustReadSize(len);
+        _Ishandshark = true;
+        return len;
+      } else {
+        int rlen = WsStickyWrap::readData((char *)pReadBuff, len);
+        if (rlen < 0) return rlen;
+        readlen += rlen;
+        pbuff->AdjustReadSize(rlen);
       }
-      pbuff->AdjustReadSize(len);
-      _Ishandshark = true;
-      return len;
     } else {
-      return WsStickyWrap::readData();
+      break;
     }
   }
   return readlen;
@@ -47,3 +62,7 @@ int WsConnect::do_handshake(char *buff) {
   }
   return 0;
 }
+UQType WsConnect::GetConnonId() { return _connonId; }
+WsConnectMgr *WsConnect::GetWsConnectMgr() { return _pConnectMgr; }
+void WsConnect::MakeServerMsg(UChar *buff, PKLType len) {}
+void WsConnect::setEv(event *ev) { _ev = ev; }
