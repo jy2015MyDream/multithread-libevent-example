@@ -21,10 +21,12 @@ class WsStickyWrap : public WsDealWith, public FdBridge {
   WsStickyWrap(int fd);
   ~WsStickyWrap();
   virtual int readData(char *pbuff, uint16_t len);
-  virtual void MakeServerMsg(UChar *buff, PKLType len) = 0;
+  virtual void MakeServerMsg(UChar *buff, PKLType msgId , PKLType len) = 0;
   virtual int parseWsHead(char *p, int len);
   virtual int finishParse(char *pData, int size);
   unsigned short CalFrameHeadSize();
   int sendFrame(const char *pdata, uint64_t size, int type);
+  public:
+  PackDealWith _pack;
 };
 #endif

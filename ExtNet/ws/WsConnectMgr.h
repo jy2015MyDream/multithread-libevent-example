@@ -10,7 +10,6 @@ class WsService;
 class WsConnectMgr {
  private:
   std::unordered_map<UQType, WsConnect *> _wsconnectMgr;
-  std::list<ServerPack *> _packList;
   UQType _UniqueId;
   WsService *_pService;
 

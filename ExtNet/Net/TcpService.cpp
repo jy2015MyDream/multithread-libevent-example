@@ -118,8 +118,6 @@ void TcpService::OnStop() {
   _ev = nullptr;
   _connectMgr.OnStop();
   close(_listenfd);
-  timeval tv;
-  tv.tv_sec = 3;
   int r = event_base_loopexit(_ev_base,nullptr);
   join();
 }

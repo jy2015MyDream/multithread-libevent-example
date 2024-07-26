@@ -21,6 +21,6 @@ class TcpStickyWrap : public PackDealWith , public FdBridge {
   TcpStickyWrap(int fd);
   ~TcpStickyWrap();
   virtual int readData();
-  virtual void MakeServerMsg(UChar *buff, PKLType len) = 0;
+  virtual void MakeServerMsg(UChar *buff,PKLType msgId, PKLType len) = 0;
 };
 #endif

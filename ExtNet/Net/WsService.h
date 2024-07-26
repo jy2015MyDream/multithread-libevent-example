@@ -7,7 +7,7 @@
 #include "../common/Singleton.h"
 #include "../ws/WsConnectMgr.h"
 #include "event2/event.h"
-
+#include <mutex>
 class WsService : public Singleton<WsService> {
  public:
   WsService();
@@ -19,7 +19,8 @@ class WsService : public Singleton<WsService> {
   void doAccept(int fd);
   void SetAddrAndPort(std::string addr, int port);
   void OnStop();
-
+  void AddPack(ServerPack *msg);
+  void Swap(std::list<ServerPack*> &list);
  private:
   int openLister();
   int dispatcher();
@@ -36,5 +37,8 @@ class WsService : public Singleton<WsService> {
   event *_ev;
   WsConnectMgr _wsconnectMgr;
   int _listenfd;
+  std::list<ServerPack*> packlist;
+  
+  std::mutex _mutex;
 };
 #endif

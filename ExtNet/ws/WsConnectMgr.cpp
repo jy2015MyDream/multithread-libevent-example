@@ -7,7 +7,9 @@ WsConnectMgr::WsConnectMgr(WsService *pservice) : _pService(pservice) {
     _UniqueId = 0;
 }
 
-void WsConnectMgr::PushMsg(ServerPack *pack) { _packList.push_back(pack); }
+void WsConnectMgr::PushMsg(ServerPack *pack) {
+  _pService->AddPack(pack);
+ }
 
 WsConnect *WsConnectMgr::NewConnect(int fd) {
   WsConnect *pConn = new WsConnect(fd, Make_uniqueId(), this);
@@ -29,12 +31,12 @@ void WsConnectMgr::OnStop() {
     it.second = nullptr;
   }
   _wsconnectMgr.clear();
-  if (!_packList.empty()) {
-    // 包还没处理完 直接删除 以后再说
-    for (auto pack : _packList) {
-      delete pack;
-      pack = nullptr;
-    }
-  }
-  _packList.clear();
+  // if (!_packList.empty()) {
+  //   // 包还没处理完 直接删除 以后再说
+  //   for (auto pack : _packList) {
+  //     delete pack;
+  //     pack = nullptr;
+  //   }
+  // }
+  // _packList.clear();
 }

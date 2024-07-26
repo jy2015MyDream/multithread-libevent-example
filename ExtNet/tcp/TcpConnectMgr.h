@@ -10,7 +10,6 @@ class TcpService;
 class TcpConnectMgr {
  private:
   std::unordered_map<UQType, TcpConnect *> _connectMgr;
-  std::list<ServerPack *> _packList;
   UQType _UniqueId;
   TcpService *_pService;
 

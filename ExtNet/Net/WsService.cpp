@@ -1,9 +1,11 @@
 
 
 #include "WsService.h"
+
 #include <arpa/inet.h>
-#include <unistd.h>
 #include <event2/thread.h>
+#include <unistd.h>
+
 #include "../ws/WsConnect.h"
 #include "../ws/WsConnectMgr.h"
 
@@ -14,7 +16,7 @@ void ws_client_read_cb(evutil_socket_t client, short what, void *ptr) {
     ret = pConn->read();
     if (ret < 0) {
       pConn->GetWsConnectMgr()->deleteConnect(pConn->GetConnonId());
-      WsConnectMgr * wsconnect = pConn->GetWsConnectMgr();
+      WsConnectMgr *wsconnect = pConn->GetWsConnectMgr();
       wsconnect->deleteConnect(pConn->GetConnonId());
       delete pConn;
       return;
@@ -32,7 +34,8 @@ void WsService::SetAddrAndPort(std::string addr, int port) {
   _addr = addr;
   _port = port;
 }
-WsService::WsService() : state(false), _wsconnectMgr(this) {}
+WsService::WsService() : state(false), _wsconnectMgr(this) {
+}
 WsService::~WsService() {
   delete _handle;
   _handle = nullptr;
@@ -113,9 +116,7 @@ int WsService::dispatcher() {
   return -1;
 }
 
-void WsService::loop() {
-  dispatcher();
-}
+void WsService::loop() { dispatcher(); }
 void WsService::OnStop() {
   event_free(_ev);
   _ev = nullptr;
@@ -123,6 +124,24 @@ void WsService::OnStop() {
   close(_listenfd);
   timeval tv;
   tv.tv_sec = 3;
-  int r = event_base_loopexit(_ev_base,nullptr);
+  int r = event_base_loopexit(_ev_base, nullptr);
   join();
+    if (!packlist.empty()) {
+    // 包还没处理完 直接删除 以后再说
+    for (auto pack : packlist) {
+      delete pack;
+      pack = nullptr;
+    }
+  }
+  packlist.clear();
+}
+
+void WsService::AddPack(ServerPack *msg){
+  std::lock_guard<std::mutex> lock(_mutex);
+  packlist.push_back(msg);
+}
+
+void WsService::Swap(std::list<ServerPack*> &list){
+  std::lock_guard<std::mutex> lock(_mutex);
+  packlist.swap(list);
 }

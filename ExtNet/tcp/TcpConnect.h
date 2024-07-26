@@ -27,6 +27,6 @@ class TcpConnect : public TcpStickyWrap {
 
  public:
   virtual int notifyred() { return readData(); }
-  virtual void MakeServerMsg(UChar *buff, PKLType len);
+  virtual void MakeServerMsg(UChar *buff,PKLType msgId, PKLType len);
 };
 #endif

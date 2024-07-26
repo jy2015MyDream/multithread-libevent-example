@@ -5,6 +5,7 @@
 #include "../common/BaseType.h"
 #include "WsStickyWrap.h"
 #include "event2/event.h"
+#include "../tcp/TcpStickyWrap.h"
 class WsConnectMgr;
 
 class WsConnect : public WsStickyWrap
@@ -15,7 +16,7 @@ public:
     virtual int readData();
     int do_handshake(char * p);
     virtual int notifyred() { return readData(); }
-    virtual void MakeServerMsg(UChar *buff, PKLType len);
+    virtual void MakeServerMsg(UChar *buff, PKLType msgId , PKLType len);
     UQType GetConnonId();
     WsConnectMgr * GetWsConnectMgr();
     void setEv(event* ev);

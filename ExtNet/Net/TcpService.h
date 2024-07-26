@@ -36,5 +36,6 @@ class TcpService : public Singleton<TcpService> {
   event *_ev;
   TcpConnectMgr _connectMgr;
   int _listenfd;
+  std::list<ServerPack *> _packList;
 };
 #endif

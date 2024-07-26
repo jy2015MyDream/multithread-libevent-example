@@ -6,12 +6,12 @@ TcpConnect::TcpConnect(int fd, UQType connId, TcpConnectMgr* pConnectMgr)
     : TcpStickyWrap(fd),
       _connonId(connId),
       _connMgr(pConnectMgr),
-      _ev(nullptr) {
-}
+      _ev(nullptr) {}
 
-void TcpConnect::MakeServerMsg(UChar* buff, PKLType len) {
-  ServerPack* pack = new ServerPack(_connonId, buff, len);
-  _connMgr->PushMsg(pack);
+void TcpConnect::MakeServerMsg(UChar* buff, PKLType msgId, PKLType len) {
+  ServerPack* pack = new ServerPack(_connonId, buff, msgId, len);
+  _connMgr->GetTcpService();
+  //_connMgr->PushMsg(pack);
 }
 UQType TcpConnect::GetConnonId() { return _connonId; }
 

@@ -64,5 +64,8 @@ int WsConnect::do_handshake(char *buff) {
 }
 UQType WsConnect::GetConnonId() { return _connonId; }
 WsConnectMgr *WsConnect::GetWsConnectMgr() { return _pConnectMgr; }
-void WsConnect::MakeServerMsg(UChar *buff, PKLType len) {}
+void WsConnect::MakeServerMsg(UChar *buff, PKLType msgId , PKLType len) {
+  ServerPack* pack = new ServerPack(_connonId, buff, msgId, len);
+  //_connMgr->PushMsg(pack);
+}
 void WsConnect::setEv(event *ev) { _ev = ev; }

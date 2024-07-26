@@ -43,7 +43,7 @@ int TcpStickyWrap::readData() {
       readlen = len;
     } else {
       memcpy(_pData + _Data_size, pReadBuff, _head->_len - _Data_size);
-      readlen = _head->_len - _Data_size;
+      readlen += _head->_len - _Data_size;
       _Data_size += _head->_len - _Data_size;
     }
     pbuff->AdjustReadSize(readlen);

@@ -57,8 +57,7 @@ int WsStickyWrap::readData(char *pbuff, uint16_t len) {
                        _Data_size - headsize - _head.len);
                 _Data_size = _Data_size - headsize - _head.len;
                 _Read_size = 0;
-              }
-              else{
+              } else {
                 return -1;
               }
               break;
@@ -142,9 +141,44 @@ int WsStickyWrap::parseWsHead(char *pbuff, int len) {
   return readlen;
 }
 int WsStickyWrap::finishParse(char *pData, int size) {
-  int i = 0;
-  i++;
-  return i;
+  int realLen = 0;
+  while (true) {
+    int readlen = 0;
+    if (_pack._Data_size < _pack._headSize) {
+      size_t cpsize = size > _pack._headSize - _pack._Data_size
+                          ? _pack._headSize - _pack._Data_size
+                          : size;
+      unsigned char *pWrite = _pack._pData + _pack._Data_size;
+      memcpy(pWrite, pData, cpsize);
+      readlen += cpsize;
+      _pack._Data_size += cpsize;
+    }
+    if (_pack._Data_size >= _pack._headSize &&
+        _pack._head->_len >
+            _pack._Data_cap)  // 数据超过一个包的数据，认为是非法数据 需要close
+    {
+      return -1;
+    }
+    if (_pack._head->_len >= _pack._Data_size + (size - readlen)) {
+      memcpy(_pack._pData + _pack._Data_size, pData + readlen,
+             (size - readlen));
+      _pack._Data_size += size - readlen;
+      readlen = size;
+    } else {
+      memcpy(_pack._pData + _pack._Data_size, pData + readlen,
+             _pack._head->_len - _pack._Data_size);
+      readlen += _pack._head->_len - _Data_size;
+      _Data_size += _pack._head->_len - _Data_size;
+    }
+    realLen += readlen;
+    if (_pack._Data_size > _pack._headSize && _pack._head->_len == _Data_size) {
+      // 一个包体完成
+      MakeServerMsg(_pack._pData,_pack._head->_msgId, _pack._head->_len);
+      _Data_size = 0;
+    }
+  }
+
+  return realLen;
 }
 
 unsigned short WsStickyWrap::CalFrameHeadSize() {

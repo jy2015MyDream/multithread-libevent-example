@@ -20,12 +20,17 @@ typedef struct msgHead {
 typedef struct ServerPack {
   unsigned char *_pData;
   unsigned short _size;
-  ServerPack(UQType connId, UChar *buff, PKLType len) {
-    _size = len + sizeof(UQType);
+  unsigned short _msgId;
+  ServerPack(UQType connId, UChar *buff,PKLType msgId, PKLType len) {
+    _size = len + sizeof(UQType)+ sizeof(UQType);
+    _msgId = msgId;
     _pData = (unsigned char *)malloc(_size);
     memset(_pData, 0, _size);
-    memcpy(_pData, (void *)&connId, sizeof(UQType));
-    memcpy(_pData + sizeof(UQType), buff, len);
+    // memset(_pData, 0, msgId);
+    memcpy(_pData,&_size,2);
+    memcpy(_pData+2,&msgId,2);
+    memcpy(_pData+4, (void *)&connId, sizeof(UQType));
+    memcpy(_pData + sizeof(UQType)+4, buff, len);
   }
   ~ServerPack() { free(_pData); }
 } ServerPack;
