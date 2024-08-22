@@ -50,7 +50,7 @@ int TcpStickyWrap::readData() {
     realLen += readlen;
     if (_Data_size > _headSize && _head->_len == _Data_size) {
       // 一个包体完成
-      MakeServerMsg(_pData, _head->_len);
+      MakeServerMsg(_pData, _head->_msgId,_head->_len);
       _Data_size = 0;
     }
 

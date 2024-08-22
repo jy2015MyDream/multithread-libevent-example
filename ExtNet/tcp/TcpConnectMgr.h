@@ -15,7 +15,7 @@ class TcpConnectMgr {
 
  public:
   TcpConnectMgr(TcpService *pservice);
-  void PushMsg(ServerPack *pack);
+  // void PushMsg(ServerPack *pack);
   TcpConnect *NewConnect(int fd);
   ~TcpConnectMgr();
   TcpService *GetTcpService();

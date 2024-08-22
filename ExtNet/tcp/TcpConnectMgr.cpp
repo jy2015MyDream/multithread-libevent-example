@@ -6,7 +6,7 @@
 
 TcpConnectMgr::TcpConnectMgr(TcpService *pservice) : _pService(pservice) {}
 
-void TcpConnectMgr::PushMsg(ServerPack *pack) { _packList.push_back(pack); }
+// void TcpConnectMgr::PushMsg(ServerPack *pack) { _packList.push_back(pack); }
 
 TcpConnect *TcpConnectMgr::NewConnect(int fd) {
   TcpConnect *pConn = new TcpConnect(fd, Make_uniqueId(), this);
@@ -28,12 +28,12 @@ void TcpConnectMgr::OnStop() {
     it.second = nullptr;
   }
   _connectMgr.clear();
-  if (!_packList.empty()) {
-    // 包还没处理完 直接删除 以后再说
-    for (auto pack : _packList) {
-      delete pack;
-      pack = nullptr;
-    }
-  }
-  _packList.clear();
+  // if (!_packList.empty()) {
+  //   // 包还没处理完 直接删除 以后再说
+  //   for (auto pack : _packList) {
+  //     delete pack;
+  //     pack = nullptr;
+  //   }
+  // }
+  // _packList.clear();
 }

@@ -10,7 +10,7 @@ TcpConnect::TcpConnect(int fd, UQType connId, TcpConnectMgr* pConnectMgr)
 
 void TcpConnect::MakeServerMsg(UChar* buff, PKLType msgId, PKLType len) {
   ServerPack* pack = new ServerPack(_connonId, buff, msgId, len);
-  _connMgr->GetTcpService();
+  //_connMgr->GetTcpService();
   //_connMgr->PushMsg(pack);
 }
 UQType TcpConnect::GetConnonId() { return _connonId; }
